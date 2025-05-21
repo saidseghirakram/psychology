@@ -62,9 +62,8 @@ export function Sidebar() {
               href={item.href}
               className={cn(
                 "flex items-center gap-3 px-4 py-2 rounded-lg transition-colors text-base font-medium",
-                "hover:bg-primary/10 focus:bg-primary/20 outline-none",
                 isActive 
-                  ? "bg-primary text-white" 
+                  ? "bg-primary text-white font-bold" 
                   : "text-primary",
                 !isOpen && "md:justify-center md:px-2"
               )}

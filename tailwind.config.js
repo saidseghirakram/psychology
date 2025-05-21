@@ -54,10 +54,7 @@ module.exports = {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			},
-  			primary: '#4CB3A5',
-  			secondary: '#E9F7F6',
-  			accent: '#72C2DC',
-  			base: '#E7E7E7',
+  			base: '#E7E7E7'
   		}
   	}
   },
