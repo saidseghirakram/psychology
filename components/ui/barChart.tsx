@@ -18,21 +18,21 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
+  { month: "January", newPatients: 14, sessions: 52 },
+  { month: "February", newPatients: 18, sessions: 60 },
+  { month: "March", newPatients: 11, sessions: 45 },
+  { month: "April", newPatients: 16, sessions: 58 },
+  { month: "May", newPatients: 20, sessions: 65 },
+  { month: "June", newPatients: 15, sessions: 54 },
 ]
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  newPatients: {
+    label: "New Patients",
     color: "hsl(var(--chart-1))",
   },
-  mobile: {
-    label: "Mobile",
+  sessions: {
+    label: "Sessions",
     color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig
@@ -41,7 +41,7 @@ export function BarChart() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Bar Chart - Multiple</CardTitle>
+        <CardTitle>Monthly Patients & Sessions</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent>
@@ -59,8 +59,8 @@ export function BarChart() {
               cursor={false}
               content={<ChartTooltipContent indicator="dashed" />}
             />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-            <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+            <Bar dataKey="newPatients" fill="var(--color-newPatients)" radius={4} />
+            <Bar dataKey="sessions" fill="var(--color-sessions)" radius={4} />
           </RechartsBarChart>
         </ChartContainer>
       </CardContent>
@@ -69,7 +69,7 @@ export function BarChart() {
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          Showing new patients and sessions for the last 6 months
         </div>
       </CardFooter>
     </Card>
