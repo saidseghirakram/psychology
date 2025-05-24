@@ -42,14 +42,19 @@ export function Donut({
   }))
 
   return (
-    <Card className="w-full p-4 bg-secondary">
+    <Card className="w-full p-4 bg-secondary dark:bg-gray-800 border-0 shadow-md">
       <div className="flex flex-col gap-2 mb-4">
-        <h4 className="text-sm text-muted-foreground">{title}</h4>
-        <p className="text-xl font-semibold">{description}</p>
-        <div className={cn("flex items-center text-sm", isPositive ? "text-green-600" : "text-red-600")}>
+        <h4 className="text-sm text-muted-foreground dark:text-gray-400">{title}</h4>
+        <p className="text-xl font-semibold dark:text-white">{description}</p>
+        <div className={cn(
+          "flex items-center text-sm",
+          isPositive 
+            ? "text-green-600 dark:text-green-400" 
+            : "text-red-600 dark:text-red-400"
+        )}>
           {isPositive ? <ArrowUpRight className="w-4 h-4 mr-1" /> : <ArrowDownRight className="w-4 h-4 mr-1" />}
           <span>{trendingValue}</span>
-          <span className="ml-1 text-muted-foreground"> {trendingText}</span>
+          <span className="ml-1 text-muted-foreground dark:text-gray-400"> {trendingText}</span>
         </div>
       </div>
 
@@ -80,9 +85,21 @@ export function Donut({
                 padding: '12px',
               },
             },
+            axis: {
+              ticks: {
+                text: {
+                  fill: 'var(--foreground)'
+                }
+              }
+            },
+            grid: {
+              line: {
+                stroke: 'var(--border)'
+              }
+            }
           }}
           tooltip={({ datum }) => (
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1 dark:bg-gray-800 dark:text-gray-200 p-2 rounded-lg shadow-lg">
               <div className="flex items-center gap-2">
                 <div 
                   className="w-3 h-3 rounded-full" 
@@ -90,10 +107,10 @@ export function Donut({
                 />
                 <span className="font-medium">{datum.label}</span>
               </div>
-              <div className="text-black text-sm">
+              <div className="text-sm dark:text-gray-300">
                 Value: {datum.value}
               </div>
-              <div className="text-black text-xs">
+              <div className="text-xs dark:text-gray-400">
                 {Math.round((datum.value / total) * 100)}% of total
               </div>
             </div>
@@ -103,13 +120,13 @@ export function Donut({
         />
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="text-center">
-            <span className="text-xl font-bold text-foreground">{total}</span>
-            <p className="text-xs text-muted-foreground">{config.visitors?.label || 'Total'}</p>
+            <span className="text-xl font-bold text-foreground dark:text-white">{total}</span>
+            <p className="text-xs text-muted-foreground dark:text-gray-400">{config.visitors?.label || 'Total'}</p>
           </div>
         </div>
       </div>
 
-      <CardContent className="mt-4 text-sm text-muted-foreground text-center">
+      <CardContent className="mt-4 text-sm text-muted-foreground dark:text-gray-400 text-center">
         {footerText}
       </CardContent>
     </Card>

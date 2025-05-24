@@ -3,6 +3,7 @@ import "./globals.css";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Navbar } from "@/components/layout/navbar";
 import type { Metadata } from "next";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 
 const inter = Inter({ 
   subsets: ["latin"], 
@@ -21,16 +22,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable}`}>
-      <body className="bg-background text-foreground">
-        <div className="flex h-screen overflow-hidden">
-          <Sidebar />
-          <div className="flex flex-1 flex-col overflow-y-auto px-6">
-            <Navbar />
-            <main className="flex-1 p-3">
-              {children}
-            </main>
+      <body className="bg-background text-foreground dark:bg-gray-900 dark:text-white">
+        <ThemeProvider>
+          <div className="flex h-screen overflow-hidden">
+            <Sidebar />
+            <div className="flex flex-1 flex-col overflow-y-auto px-6">
+              <Navbar />
+              <main className="flex-1 p-3">
+                {children}
+              </main>
+            </div>
           </div>
-        </div>
+        </ThemeProvider>
       </body>
     </html>
   );

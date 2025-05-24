@@ -6,8 +6,8 @@ import MapAlgeria from "@/components/layout/Map"
 export default function OverviewPage() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-4 mt-2">
-      <div className="col-span-2">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div className="col-span-2 space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Donut 
             data={browserData}
             config={browserConfig}
@@ -27,11 +27,13 @@ export default function OverviewPage() {
             footerText="Showing gender distribution of patients"
           />
         </div>
-        <div className="w-full">
+        <div className="w-full rounded-xl p-4">
           <MapAlgeria />
         </div>
       </div>
-      <BarChart />
+      <div className="h-full">
+        <BarChart />
+      </div>
     </div>
   )
 } 

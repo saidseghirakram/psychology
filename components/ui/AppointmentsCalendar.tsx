@@ -1,9 +1,10 @@
 "use client"
 import React, { useState } from "react";
-  import { AppointmentEvent, AppointmentEventData } from "./AppointmentEvent";
+import { AppointmentEvent, AppointmentEventData } from "./AppointmentEvent";
 import { AppointmentEventModal } from "./AppointmentEventModal";
 import { addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, isSameMonth, isSameDay, format } from "date-fns";
 import { Button } from "./button";
+import { cn } from "@/lib/utils";
 
 interface AppointmentsCalendarProps {
   events: AppointmentEventData[];
@@ -34,16 +35,25 @@ export const AppointmentsCalendar: React.FC<AppointmentsCalendarProps> = ({ even
       );
       days.push(
         <div
-          className={`border min-h-[90px] p-1 align-top relative bg-white ${!isSameMonth(day, monthStart) ? "bg-gray-50 text-gray-400" : ""}`}
+          className={cn(
+            "border border-border min-h-[90px] p-1 align-top relative",
+            "dark:border-gray-700",
+            isSameMonth(day, monthStart)
+              ? "bg-secondary dark:bg-gray-800"
+              : "bg-secondary/50 text-muted-foreground dark:bg-gray-900/50"
+          )}
           key={day.toString()}
         >
-          <div className="text-xs font-semibold mb-1">{formattedDate}</div>
+          <div className="text-xs font-semibold mb-1 dark:text-gray-300">{formattedDate}</div>
           <div className="flex flex-col gap-1">
             {dayEvents.slice(0, 3).map((event, idx) => (
               <AppointmentEvent key={idx} event={event} onClick={() => setSelectedEvent(event)} />
             ))}
             {dayEvents.length > 3 && (
-              <div className="text-xs text-center text-primary cursor-pointer" onClick={() => setSelectedEvent(dayEvents[0])}>
+              <div 
+                className="text-xs text-center text-primary cursor-pointer dark:text-primary-foreground hover:opacity-80" 
+                onClick={() => setSelectedEvent(dayEvents[0])}
+              >
                 +{dayEvents.length - 3} more
               </div>
             )}
@@ -61,13 +71,27 @@ export const AppointmentsCalendar: React.FC<AppointmentsCalendarProps> = ({ even
   }
 
   return (
-    <div className="bg-white rounded-xl shadow p-4 w-full">
+    <div className="bg-secondary rounded-xl shadow-md p-4 w-full dark:bg-gray-800 dark:shadow-gray-900">
       <div className="flex items-center justify-between mb-4">
-        <Button variant="outline" onClick={handlePrevMonth}>&lt;</Button>
-        <div className="text-lg font-bold">{format(currentMonth, "MMMM yyyy")}</div>
-        <Button variant="outline" onClick={handleNextMonth}>&gt;</Button>
+        <Button 
+          variant="outline" 
+          onClick={handlePrevMonth}
+          className="dark:border-gray-700 dark:hover:bg-gray-700"
+        >
+          &lt;
+        </Button>
+        <div className="text-lg font-bold dark:text-white">
+          {format(currentMonth, "MMMM yyyy")}
+        </div>
+        <Button 
+          variant="outline" 
+          onClick={handleNextMonth}
+          className="dark:border-gray-700 dark:hover:bg-gray-700"
+        >
+          &gt;
+        </Button>
       </div>
-      <div className="grid grid-cols-7 mb-2 text-xs font-bold text-center text-muted-foreground">
+      <div className="grid grid-cols-7 mb-2 text-xs font-bold text-center text-muted-foreground dark:text-gray-400">
         <div>Mon</div>
         <div>Tue</div>
         <div>Wed</div>
