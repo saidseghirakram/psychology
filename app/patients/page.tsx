@@ -29,7 +29,7 @@ export default function PatientsPage() {
             </div>
             <div className="text-center mb-4">
               <p className="font-semibold text-lg">{doctor.name}</p>
-              <p className="text-sm text-red-500">{doctor.specialty}</p>
+              <p className="text-sm text-primary">{doctor.specialty}</p>
             </div>
             <CardFooter className="flex flex-col space-y-2 w-full p-0">
               <Button variant="outline" className="w-full">CHAT</Button>
