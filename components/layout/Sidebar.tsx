@@ -13,7 +13,7 @@ export function Sidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const { isDarkMode } = useTheme();
+  const {  } = useTheme();
 
   const ToggleButton = ({ className, ...props }: React.HTMLAttributes<HTMLButtonElement>) => (
     <button
