@@ -39,7 +39,7 @@ export function Navbar() {
   // TODO: Implement dark mode toggle properly with ThemeProvider
 
   return (
-    <header className=" w-full shadow-sm ">
+    <header className=" w-full shadow-sm bg-secondary p-4 my-4 rounded-lg ">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center">
          
@@ -53,7 +53,7 @@ export function Navbar() {
                 <Input
                   type="search"
                   placeholder="Search ..."
-                  className="w-full rounded-lg bg-background pl-9 border-2 border-secondary "
+                  className="w-full rounded-lg bg-background pl-9 border-1   border-primary h-12 shadow-sm"
                 />
               </div>
             </form>
