@@ -42,7 +42,7 @@ export function Donut({
   }))
 
   return (
-    <Card className="w-full p-4">
+    <Card className="w-full p-4 bg-secondary">
       <div className="flex flex-col gap-2 mb-4">
         <h4 className="text-sm text-muted-foreground">{title}</h4>
         <p className="text-xl font-semibold">{description}</p>
@@ -90,10 +90,10 @@ export function Donut({
                 />
                 <span className="font-medium">{datum.label}</span>
               </div>
-              <div className="text-muted-foreground text-sm">
+              <div className="text-black text-sm">
                 Value: {datum.value}
               </div>
-              <div className="text-muted-foreground text-xs">
+              <div className="text-black text-xs">
                 {Math.round((datum.value / total) * 100)}% of total
               </div>
             </div>

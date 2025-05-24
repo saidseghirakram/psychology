@@ -1,0 +1,9 @@
+[
+  {"name": "Médéa" , "code": "26", "lat": 36.2648, "lng": 2.7539, "zone": "custom1", "color": "#3B82F6", "count": 300},
+  {"name": "Adrar", "code": "1", "lat": 27.8743, "lng": -0.2939, "zone": "custom2", "color": "#72C2DC", "count": 200},
+  {"name": "Tizi Ouzou", "code": "15", "lat": 36.7169, "lng": 4.0497, "zone": "custom3", "color": "#F59E42", "count": 150},
+  {"name": "Béjaïa", "code": "6", "lat": 36.7509, "lng": 5.0567, "zone": "custom4", "color": "#8B5CF6", "count": 400},
+  {"name": "Blida", "code": "9", "lat": 36.4700, "lng": 2.8277, "zone": "custom5", "color": "#4CB3A5", "count": 250},
+  {"name": "Sétif", "code": "19", "lat": 36.1911, "lng": 5.4137, "zone": "custom6", "color": "#F472B6", "count": 180},
+  {"name": "Ghardaïa", "code": "47", "lat": 32.4894, "lng": 3.6731, "zone": "custom7", "color": "#aaaF24", "count": 120}
+] 

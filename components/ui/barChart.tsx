@@ -39,7 +39,7 @@ const chartConfig = {
 
 export function BarChart() {
   return (
-    <Card>
+    <Card className="bg-secondary">
       <CardHeader>
         <CardTitle>Monthly Patients & Sessions</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
