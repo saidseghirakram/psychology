@@ -13,6 +13,8 @@ interface Wilaya {
   color: string;
 }
 
+
+
 const MapAlgeria: React.FC = () => {
   const [wilayas, setWilayas] = useState<Wilaya[]>([]);
 
@@ -39,7 +41,7 @@ const MapAlgeria: React.FC = () => {
         <div className="w-full max-w-[500px]">
           <Algeria
             type="select-single"
-            size={"100%" as any}
+            size="100%"
             hoverColor="#E9F7F6"
             selectColor="#4CB3A5"
             cityColors={cityColors}
