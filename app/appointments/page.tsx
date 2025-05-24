@@ -1,5 +1,4 @@
 import { AppointmentsCalendar } from "@/components/ui/AppointmentsCalendar";
-import { AppointmentLegend } from "@/components/ui/AppointmentLegend";
 import { AppointmentEventData } from "@/components/ui/AppointmentEvent";
 
 const now = new Date();
@@ -33,10 +32,9 @@ const mockEvents: AppointmentEventData[] = [
 
 export default function AppointmentsPage() {
   return (
-    <div className="p-4  ">
+    <div className="p-6  ">
       <h1 className="text-2xl font-bold mb-6">Appointments</h1>
       <AppointmentsCalendar events={mockEvents} />
-      <AppointmentLegend />
     </div>
   );
 } 

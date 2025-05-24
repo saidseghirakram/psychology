@@ -4,7 +4,6 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-// Define a type for messages
 type Message = {
   text: string;
   sender: 'user' | 'ai';
@@ -17,7 +16,6 @@ export default function ChatAiPage() {
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to the latest message
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -26,7 +24,6 @@ export default function ChatAiPage() {
     if (input.trim()) {
       const newUserMessage: Message = { text: input, sender: 'user' };
       setMessages([...messages, newUserMessage]);
-      // Simulate an AI response (replace with actual API call)
       setTimeout(() => {
         const aiResponse: Message = { text: `Echo: ${input}`, sender: 'ai' };
         setMessages((prevMessages) => [...prevMessages, aiResponse]);
@@ -42,7 +39,7 @@ export default function ChatAiPage() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] bg-background">
+    <div className="flex flex-col h-[calc(100vh-4rem)] bg-background shadow-md mx-6 my-8 rounded-lg">
       {/* Message Area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message, index) => (

@@ -12,9 +12,9 @@ export type AppointmentEventData = {
 
 const typeColors: Record<AppointmentEventData["type"], string> = {
   emergency: "bg-blue-800 text-white",
-  examination: "bg-yellow-400 text-black",
+  examination: "bg-green-200 text-black",
   consultation: "bg-purple-500 text-white",
-  routine: "bg-red-500 text-white",
+  routine: "bg-red-300 text-white",
   sick: "bg-blue-400 text-white",
 };
 

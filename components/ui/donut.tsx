@@ -44,16 +44,45 @@ export function Donut({
     return data.reduce((acc, curr) => acc + curr.visitors, 0)
   }, [data])
 
+  const [innerRadius, setInnerRadius] = React.useState(60);
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+    
+      if (width < 480) {
+        setInnerRadius(70); 
+      } else if (width < 768) {
+        setInnerRadius(70); 
+      } else if (width < 1024) {
+        setInnerRadius(70); 
+      } else if (width < 1440) {
+        setInnerRadius(80); 
+      } else {
+      }
+    };
+    
+
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []); 
+
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col ">
       <CardHeader className="items-center pb-0">
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 pb-0">
+
+
+      
+      <CardContent className="flex-1 pb-0 ">
         <ChartContainer
           config={config}
-          className="mx-auto aspect-square max-h-[250px]"
+          className="mx-auto aspect-square max-h-auto w-full"
         >
           <PieChart>
             <ChartTooltip
@@ -64,12 +93,14 @@ export function Donut({
               data={data}
               dataKey="visitors"
               nameKey="browser"
-              innerRadius={60}
-              strokeWidth={5}
+              innerRadius={innerRadius}
+              strokeWidth={115}
             >
               <Label
                 content={(props: LabelProps) => {
                   const { viewBox } = props;
+
+
                   if (viewBox && "cx" in viewBox && "cy" in viewBox) {
                     return (
                       <text
@@ -81,28 +112,35 @@ export function Donut({
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          className="fill-foreground text-3xl font-normal md:font-bold  "
                         >
                           {totalVisitors.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
+                          className="fill-muted-foreground text-sm md:text-base"
                         >
                           {config.visitors.label}
                         </tspan>
                       </text>
                     )
                   }
+
+                  
                   return undefined;
                 }}
               />
             </Pie>
           </PieChart>
         </ChartContainer>
+        
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
+
+
+
+
+      <CardFooter className="flex-col gap-2 text-sm ">
         <div className="flex items-center gap-2 font-medium leading-none">
           Trending up by {trendingValue} {trendingText} <TrendingUp className="h-4 w-4" />
         </div>
