@@ -1,123 +1,119 @@
 "use client"
 
 import * as React from "react"
-import { TrendingUp } from "lucide-react"
-import { Label, Pie, PieChart, ResponsiveContainer } from "recharts"
-import type { LabelProps } from "recharts"
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart"
-import { ChartDataItem } from "@/lib/data"
+import { ResponsivePie } from "@nivo/pie"
+import { Card, CardContent } from "@/components/ui/card"
+import { ArrowUpRight, ArrowDownRight } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface DonutProps {
-  data: ChartDataItem[]
-  config: ChartConfig
   title: string
-  description?: string
-  trendingValue?: string
-  trendingText?: string
-  footerText?: string
+  description: string
+  trendingValue: string
+  trendingText: string
+  footerText: string
+  data: { name: string; value: number }[]
+  config: {
+    [key: string]: {
+      label: string
+      color?: string
+    }
+  }
 }
 
 export function Donut({
-  data,
-  config,
   title,
-  description = "January - June 2024",
-  trendingValue = "5.2%",
-  trendingText = "this month",
-  footerText = "Showing total visitors for the last 6 months"
+  description,
+  trendingValue,
+  trendingText,
+  footerText,
+  data,
+  config
 }: DonutProps) {
-  const totalVisitors = React.useMemo(() => {
-    return data.reduce((acc, curr) => acc + curr.visitors, 0)
-  }, [data])
+  const total = data.reduce((sum, item) => sum + item.value, 0)
+  const isPositive = !trendingValue.startsWith("-")
+
+  // Transform data for Nivo
+  const chartData = data.map(item => ({
+    id: item.name,
+    label: config[item.name]?.label || item.name,
+    value: item.value,
+    color: config[item.name]?.color || undefined
+  }))
 
   return (
-    <Card className="flex flex-col h-full">
-      <CardHeader className="items-center py-3">
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      
-      <CardContent className="flex-1 flex items-center justify-center p-2">
-  <div className="w-full max-w-[350px] h-full flex justify-center items-center">
-    <ChartContainer config={config}>
-      <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
-          <ChartTooltip
-            cursor={false}
-            content={<ChartTooltipContent hideLabel />}
-          />
-          <Pie
-            data={data}
-            dataKey="visitors"
-            nameKey="browser"
-            innerRadius="65%"
-            outerRadius="95%"
-            cx="50%"
-            cy="50%"
-            startAngle={90}
-            endAngle={450}
-          >
-            <Label
-              content={(props: LabelProps) => {
-                const { viewBox } = props;
-                if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                  return (
-                    <text
-                      x={viewBox.cx}
-                      y={viewBox.cy}
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                    >
-                      <tspan
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        className="fill-foreground text-3xl font-semibold md:text-4xl sm:text-2xl"
-                      >
-                        {totalVisitors.toLocaleString()}
-                      </tspan>
-                      <tspan
-                        x={viewBox.cx}
-                        y={(viewBox.cy || 0) + 24}
-                        className="fill-muted-foreground text-sm"
-                      >
-                        {config.visitors.label}
-                      </tspan>
-                    </text>
-                  );
-                }
-                return undefined;
-              }}
-            />
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
-    </ChartContainer>
-  </div>
-</CardContent>
-
-
-      <CardFooter className="flex-col gap-2 text-sm pb-8">
-        <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by {trendingValue} {trendingText} <TrendingUp className="h-4 w-4" />
+    <Card className="w-full p-4">
+      <div className="flex flex-col gap-2 mb-4">
+        <h4 className="text-sm text-muted-foreground">{title}</h4>
+        <p className="text-xl font-semibold">{description}</p>
+        <div className={cn("flex items-center text-sm", isPositive ? "text-green-600" : "text-red-600")}>
+          {isPositive ? <ArrowUpRight className="w-4 h-4 mr-1" /> : <ArrowDownRight className="w-4 h-4 mr-1" />}
+          <span>{trendingValue}</span>
+          <span className="ml-1 text-muted-foreground"> {trendingText}</span>
         </div>
-        <div className="leading-none text-muted-foreground">
-          {footerText}
+      </div>
+
+      <div className="relative h-[200px]">
+        <ResponsivePie
+          data={chartData}
+          margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
+          innerRadius={0.6}
+          padAngle={0.5}
+          cornerRadius={3}
+          activeOuterRadiusOffset={8}
+          colors={{ datum: 'data.color' }}
+          borderWidth={1}
+          borderColor={{
+            from: 'color',
+            modifiers: [['darker', 0.2]]
+          }}
+          enableArcLinkLabels={false}
+          enableArcLabels={false}
+          theme={{
+            tooltip: {
+              container: {
+                backgroundColor: 'var(--background)',
+                color: 'var(--foreground)',
+                fontSize: '12px',
+                borderRadius: '6px',
+                boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+                padding: '12px',
+              },
+            },
+          }}
+          tooltip={({ datum }) => (
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2">
+                <div 
+                  className="w-3 h-3 rounded-full" 
+                  style={{ backgroundColor: datum.color }}
+                />
+                <span className="font-medium">{datum.label}</span>
+              </div>
+              <div className="text-muted-foreground text-sm">
+                Value: {datum.value}
+              </div>
+              <div className="text-muted-foreground text-xs">
+                {Math.round((datum.value / total) * 100)}% of total
+              </div>
+            </div>
+          )}
+          transitionMode="startAngle"
+          motionConfig="gentle"
+        />
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="text-center">
+            <span className="text-xl font-bold text-foreground">{total}</span>
+            <p className="text-xs text-muted-foreground">{config.visitors?.label || 'Total'}</p>
+          </div>
         </div>
-      </CardFooter>
+      </div>
+
+      <CardContent className="mt-4 text-sm text-muted-foreground text-center">
+        {footerText}
+      </CardContent>
     </Card>
   )
 }
+
+export default Donut

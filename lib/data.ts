@@ -9,13 +9,13 @@ export type ChartConfigItem = {
   color: string
 }
 
-export const browserData: ChartDataItem[] = [
-  { browser: "Stress", visitors: 110, fill: "hsl(var(--chart-1))" },
-  { browser: "Mood", visitors: 90, fill: "hsl(var(--chart-2))" },
-  { browser: "Behavior", visitors: 70, fill: "hsl(var(--chart-3))" },
-  { browser: "Sleep", visitors: 50, fill: "hsl(var(--chart-4))" },
-  { browser: "Other", visitors: 25, fill: "hsl(var(--chart-5))" },
-]
+export const browserData = [
+  { name: "Stress", value: 110 },
+  { name: "Mood", value: 90 },
+  { name: "Behavior", value: 70 },
+  { name: "Sleep", value: 50 },
+  { name: "Other", value: 25 }
+];
 
 export const browserConfig = {
   visitors: {
@@ -44,11 +44,11 @@ export const browserConfig = {
 }
 
 // Example data for other pages/charts
-export const socialMediaData: ChartDataItem[] = [
-  { browser: "Male", visitors: 120, fill: "hsl(var(--chart-1))" },
-  { browser: "Female", visitors: 140, fill: "hsl(var(--chart-2))" },
-  { browser: "Children", visitors: 35, fill: "hsl(var(--chart-3))" },
-]
+export const socialMediaData = [
+  { name: "Male", value: 120 },
+  { name: "Female", value: 140 },
+  { name: "Children", value: 35 }
+];
 
 export const socialMediaConfig = {
   visitors: {
@@ -66,4 +66,38 @@ export const socialMediaConfig = {
     label: "Children",
     color: "hsl(var(--chart-3))",
   },
-} 
+}
+
+// Data for bar chart
+export const barChartData = [
+  {
+    name: "Jan",
+    patients: 80,
+    sessions: 120
+  },
+  {
+    name: "Feb",
+    patients: 90,
+    sessions: 140
+  },
+  {
+    name: "Mar",
+    patients: 70,
+    sessions: 110
+  },
+  {
+    name: "Apr",
+    patients: 85,
+    sessions: 130
+  },
+  {
+    name: "May",
+    patients: 95,
+    sessions: 150
+  },
+  {
+    name: "Jun",
+    patients: 75,
+    sessions: 115
+  }
+]; 
