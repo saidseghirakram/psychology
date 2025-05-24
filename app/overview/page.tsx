@@ -4,9 +4,7 @@ import { browserConfig, browserData, socialMediaConfig, socialMediaData } from "
 
 export default function OverviewPage() {
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-6">Overview</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-2">
         <div className="grid gap-16 grid-cols-1 md:grid-cols-2 col-span-2">
           <Donut 
             data={browserData}
@@ -30,6 +28,5 @@ export default function OverviewPage() {
         <BarChart />
       </div>
      
-    </div>
   )
 } 

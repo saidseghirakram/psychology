@@ -39,8 +39,7 @@ export default function ChatAiPage() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] bg-background shadow-md mx-6 my-8 rounded-lg">
-      {/* Message Area */}
+    <div className="flex flex-col h-[calc(100vh-4rem)] bg-background   my-2 rounded-lg shadow-lg">
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message, index) => (
           <div
