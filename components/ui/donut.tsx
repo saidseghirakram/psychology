@@ -51,65 +51,63 @@ export function Donut({
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       
-      <CardContent className="flex-1 flex items-center justify-center content-center ">
-        <div className="flex-1 flex items-center justify-center ">
-          <ChartContainer config={config}>
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent hideLabel />}
-                />
-                <Pie
-                  data={data}
-                  dataKey="visitors"
-                  nameKey="browser"
-                  innerRadius="65%"
-                  outerRadius="95%"
-                  cx="50%"
-                  cy="50%"
-                  startAngle={20}
-                  endAngle={450}
-                >
-                  <Label
-                    content={(props: LabelProps) => {
-                      const { viewBox } = props;
-                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                        return (
-                          <text
-                            x={viewBox.cx}
-                            y={viewBox.cy}
-                            textAnchor="middle"
-                            dominantBaseline="middle"
-                          >
-                            <tspan
-                              x={viewBox.cx}
-                              y={viewBox.cy}
-                              className="fill-foreground text-3xl font-semibold md:text-4xl sm:text-2xl"
-                            >
-                              {totalVisitors.toLocaleString()}
-                            </tspan>
-                            <tspan
-                              x={viewBox.cx}
-                              y={(viewBox.cy || 0) + 24}
-                              className="fill-muted-foreground text-sm"
-                            >
-                              {config.visitors.label}
-                            </tspan>
-                          </text>
-                        );
-                      }
-                      return undefined;
-                    }}
-                  />
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-          </ChartContainer>
-        </div>
-      </CardContent>
-
-
+      <CardContent className="flex-1 flex items-center justify-center p-2">
+  <div className="w-full max-w-[350px] h-full flex justify-center items-center">
+    <ChartContainer config={config}>
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <ChartTooltip
+            cursor={false}
+            content={<ChartTooltipContent hideLabel />}
+          />
+          <Pie
+            data={data}
+            dataKey="visitors"
+            nameKey="browser"
+            innerRadius="65%"
+            outerRadius="95%"
+            cx="50%"
+            cy="50%"
+            startAngle={90}
+            endAngle={450}
+          >
+            <Label
+              content={(props: LabelProps) => {
+                const { viewBox } = props;
+                if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                  return (
+                    <text
+                      x={viewBox.cx}
+                      y={viewBox.cy}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                    >
+                      <tspan
+                        x={viewBox.cx}
+                        y={viewBox.cy}
+                        className="fill-foreground text-3xl font-semibold md:text-4xl sm:text-2xl"
+                      >
+                        {totalVisitors.toLocaleString()}
+                      </tspan>
+                      <tspan
+                        x={viewBox.cx}
+                        y={(viewBox.cy || 0) + 24}
+                        className="fill-muted-foreground text-sm"
+                      >
+                        {config.visitors.label}
+                      </tspan>
+                    </text>
+                  );
+                }
+                return undefined;
+              }}
+            />
+          </Pie>
+        </PieChart>
+      </ResponsiveContainer>
+    </ChartContainer>
+  </div>
+</CardContent>
 
 
       <CardFooter className="flex-col gap-2 text-sm pb-8">

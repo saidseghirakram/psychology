@@ -4,8 +4,8 @@ import { browserConfig, browserData, socialMediaConfig, socialMediaData } from "
 
 export default function OverviewPage() {
   return (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-2">
-        <div className="grid gap-16 grid-cols-1 md:grid-cols-2 col-span-2">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-4 mt-2">
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 col-span-2">
           <Donut 
             data={browserData}
             config={browserConfig}
