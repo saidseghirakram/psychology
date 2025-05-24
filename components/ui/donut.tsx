@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { TrendingUp } from "lucide-react"
-import { Label, Pie, PieChart } from "recharts"
+import { Label, Pie, PieChart, ResponsiveContainer } from "recharts"
 import type { LabelProps } from "recharts"
 
 import {
@@ -44,103 +44,75 @@ export function Donut({
     return data.reduce((acc, curr) => acc + curr.visitors, 0)
   }, [data])
 
-  const [innerRadius, setInnerRadius] = React.useState(60);
-
-  React.useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-    
-      if (width < 480) {
-        setInnerRadius(70); 
-      } else if (width < 768) {
-        setInnerRadius(70); 
-      } else if (width < 1024) {
-        setInnerRadius(70); 
-      } else if (width < 1440) {
-        setInnerRadius(80); 
-      } else {
-      }
-    };
-    
-
-    handleResize();
-
-    window.addEventListener('resize', handleResize);
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []); 
-
   return (
-    <Card className="flex flex-col ">
-      <CardHeader className="items-center pb-0">
+    <Card className="flex flex-col h-full">
+      <CardHeader className="items-center py-3">
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-
-
       
-      <CardContent className="flex-1 pb-0 ">
-        <ChartContainer
-          config={config}
-          className="mx-auto aspect-square max-h-auto w-full"
-        >
-          <PieChart>
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Pie
-              data={data}
-              dataKey="visitors"
-              nameKey="browser"
-              innerRadius={innerRadius}
-              strokeWidth={115}
-            >
-              <Label
-                content={(props: LabelProps) => {
-                  const { viewBox } = props;
-
-
-                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          className="fill-foreground text-3xl font-normal md:font-bold  "
-                        >
-                          {totalVisitors.toLocaleString()}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground text-sm md:text-base"
-                        >
-                          {config.visitors.label}
-                        </tspan>
-                      </text>
-                    )
-                  }
-
-                  
-                  return undefined;
-                }}
-              />
-            </Pie>
-          </PieChart>
-        </ChartContainer>
-        
+      <CardContent className="flex-1 flex items-center justify-center content-center ">
+        <div className="flex-1 flex items-center justify-center ">
+          <ChartContainer config={config}>
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Pie
+                  data={data}
+                  dataKey="visitors"
+                  nameKey="browser"
+                  innerRadius="65%"
+                  outerRadius="95%"
+                  cx="50%"
+                  cy="50%"
+                  startAngle={20}
+                  endAngle={450}
+                >
+                  <Label
+                    content={(props: LabelProps) => {
+                      const { viewBox } = props;
+                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                        return (
+                          <text
+                            x={viewBox.cx}
+                            y={viewBox.cy}
+                            textAnchor="middle"
+                            dominantBaseline="middle"
+                          >
+                            <tspan
+                              x={viewBox.cx}
+                              y={viewBox.cy}
+                              className="fill-foreground text-3xl font-semibold md:text-4xl sm:text-2xl"
+                            >
+                              {totalVisitors.toLocaleString()}
+                            </tspan>
+                            <tspan
+                              x={viewBox.cx}
+                              y={(viewBox.cy || 0) + 24}
+                              className="fill-muted-foreground text-sm"
+                            >
+                              {config.visitors.label}
+                            </tspan>
+                          </text>
+                        );
+                      }
+                      return undefined;
+                    }}
+                  />
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </ChartContainer>
+        </div>
       </CardContent>
 
 
 
 
-      <CardFooter className="flex-col gap-2 text-sm ">
+      <CardFooter className="flex-col gap-2 text-sm pb-8">
         <div className="flex items-center gap-2 font-medium leading-none">
           Trending up by {trendingValue} {trendingText} <TrendingUp className="h-4 w-4" />
         </div>
