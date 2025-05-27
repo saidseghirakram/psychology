@@ -35,7 +35,7 @@ const getTitleFromPathname = (pathname: string): string => {
 
 export function Navbar() {
   const pathname = usePathname();
-  const pageTitle = getTitleFromPathname(pathname);
+  const pageTitle = getTitleFromPathname(pathname ?? '');
   const { isDarkMode, toggleTheme } = useTheme();
 
   return (
