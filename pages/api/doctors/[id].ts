@@ -1,20 +1,23 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { supabase } from '@/lib/supabaseClient';
+import type { NextApiRequest, NextApiResponse } from "next";
+import { supabase } from "@/lib/supabaseClient";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { id } = req.query;
 
-  if (typeof id !== 'string') {
-    return res.status(400).json({ error: 'Invalid doctor id' });
+  if (typeof id !== "string") {
+    return res.status(400).json({ error: "Invalid doctor id" });
   }
 
   // Update doctor
-  if (req.method === 'PATCH' || req.method === 'PUT') {
+  if (req.method === "PATCH" || req.method === "PUT") {
     const updates = req.body;
     const { data, error } = await supabase
-      .from('doctors')
+      .from("Doctors")
       .update(updates)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -23,11 +26,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   // Delete doctor
-  if (req.method === 'DELETE') {
-    const { error } = await supabase
-      .from('doctors')
-      .delete()
-      .eq('id', id);
+  if (req.method === "DELETE") {
+    const { error } = await supabase.from("Doctors").delete().eq("id", id);
 
     if (error) return res.status(400).json({ error });
     return res.status(204).end();
