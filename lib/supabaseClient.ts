@@ -10,7 +10,7 @@ const password = process.env.SUPABASE_PASSWORD!;
 export async function SignIn() {
   
   const {  error } = await supabase.auth.signInWithPassword({
-    email: email,
+    email: email ,
     password: password,
   });
   if (error) return  console.log(error);
