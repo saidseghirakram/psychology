@@ -38,6 +38,7 @@ export default async function handler(req:NextApiRequest , res:NextApiResponse){
   /* Delete Patient By Id */
   if(req.method === 'DELETE'){
     await SignIn()
+  
     const {data , error } = await supabase 
     .from('patients')
     .delete()
@@ -47,6 +48,23 @@ export default async function handler(req:NextApiRequest , res:NextApiResponse){
     if(error) return handleApiError(res , error)
     return res.status(200).json({message : 'Patient deleted successfully', patients: data})
   }
+
+    /* Assign Patient to Doctor */
+  if(req.method === 'POST'){
+    await SignIn()
+    const {doctor_id} = req.body
+    if(doctor_id !== null) return res.status(400).json({message: 'You cannot assign a doctor to a patient, already exist'})
+    const {data , error } = await supabase
+    .from('patients')
+    .update({doctor_id: doctor_id})
+    .eq('id',id)
+    .select()
+    .single()
+
+    if(error) return handleApiError(res , error)
+    return res.status(200).json({message: 'Patient assigned to doctor successfully', doctor_patient: data})
+  }
+
 
   return res.status(405).json({message: 'Method not allowed'})
 }

@@ -7,21 +7,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await SignIn();
 
     if (req.method === 'GET') {
+      await SignIn()
       const { data, error } = await supabase.from('patients').select('*');
       if (error) throw error;
       return res.status(200).json({ patients: data });
     }
 
     if (req.method === 'POST') {
-      const { fullName, email, password, doctor_id } = req.body;
+      await SignIn()
+      const { fullName, email, password} = req.body;
 
-      if (!fullName || !email || !password || !doctor_id) {
+      if (!fullName || !email || !password ) {
         return handleApiError(res, 'Missing required fields', 400);
       }
 
       const { data, error } = await supabase
         .from('patients')
-        .insert([{ fullName, email, password, doctor_id }])
+        .insert([{ fullName, email, password }])
         .select()
         .single()
 

@@ -56,5 +56,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json({message: 'Doctor deleted successfully', doctor: data})
   }
 
+
+
+
   return res.status(405).end();
 }
