@@ -20,28 +20,28 @@ export default function LoginPage() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-supabase-email': 'psychology@gmail.com', // <-- Add this
-        'x-supabase-password': 'test1234', // <-- And this
+        'x-supabase-email': 'psychology@gmail.com',
+        'x-supabase-password': 'test1234',
       },
       body: JSON.stringify({ email, password, type: 'doctor' }),
     });
     const data = await res.json();
     if (res.ok && data.token) {
       localStorage.setItem('token', data.token);
-      router.replace('/');
+      router.replace('/dashboard');
     } else {
       setError(data.error || 'Login failed');
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <Card className="w-full max-w-md shadow-lg">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <Card className="w-full max-w-md shadow-lg border border-primary/10">
         <CardHeader>
-          <CardTitle className="text-primary">Doctor Login</CardTitle>
+          <CardTitle className="text-primary text-2xl text-center">Doctor Login</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-6">
             <div>
               <Label htmlFor="email">Email</Label>
               <Input
@@ -50,7 +50,8 @@ export default function LoginPage() {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required
-                className="mt-1"
+                className="mt-1 bg-background text-foreground"
+                autoComplete="email"
               />
             </div>
             <div>
@@ -61,7 +62,8 @@ export default function LoginPage() {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
-                className="mt-1"
+                className="mt-1 bg-background text-foreground"
+                autoComplete="current-password"
               />
             </div>
             {error && <div className="text-destructive text-sm">{error}</div>}
