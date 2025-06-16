@@ -3,17 +3,15 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function Home() {
+export function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    if (token) {
-      router.replace('/dashboard');
-    } else {
-      router.replace('/auth/login');
+    if (!token) {
+      router.replace('/login');
     }
   }, [router]);
 
-  return null;
+  return <>{children}</>;
 }
