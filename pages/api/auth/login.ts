@@ -5,8 +5,31 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
 const JWT_SECRET = process.env.JWT_SECRET!;
+const INTERNAL_EMAIL = process.env.SUPABASE_EMAIL;
+const INTERNAL_PASSWORD = process.env.SUPABASE_PASSWORD;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Check internal credentials (from env or headers)
+  let internalEmail = INTERNAL_EMAIL;
+  let internalPassword = INTERNAL_PASSWORD;
+
+  if ((!internalEmail || !internalPassword) && req) {
+    internalEmail = req.headers['x-supabase-email'] as string | undefined;
+    internalPassword = req.headers['x-supabase-password'] as string | undefined;
+  }
+
+  if (!internalEmail || !internalPassword) {
+    return handleApiError(res, 'Missing internal credentials', 401);
+  }
+
+  // Only allow access if correct internal credentials are provided
+  if (
+    req.headers['x-supabase-email'] !== internalEmail ||
+    req.headers['x-supabase-password'] !== internalPassword
+  ) {
+    return handleApiError(res, 'Unauthorized: Invalid internal credentials', 401);
+  }
+
   if (req.method !== 'POST') return res.status(405).end();
 
   const { email, password, type } = req.body;
