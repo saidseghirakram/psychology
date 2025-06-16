@@ -3,37 +3,38 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink } from "@/components/ui/pagination";
 
-const doctors = [
-  { name: "haithem Attab", specialty: "Family Doctor" },
-  { name: "HATOUMI BENYLS", specialty: "Heart Surgeon" },
-  { name: "TAKTONI AMINE", specialty: "Health Specialist" },
-  { name: "TAYEB TT", specialty: "Heart Surgeon" },
-  { name: "TIBERKAK", specialty: "Health Specialist" },
-  { name: "RAHIM MESAOUD", specialty: "Health Counsellor" },
-  { name: "Dr. Banabas Paul", specialty: "General Care" },
-  { name: "Dr. Ayo Jones", specialty: "Family Practioner" },
+const patients = [
+  { name: "Abdelkader Bensalem", condition: "Depression" },
+  { name: "Yasmine Bouzid", condition: "Anxiety" },
+  { name: "Karim Belkacem", condition: "Stress" },
+  { name: "Nassima Haddad", condition: "Bipolar Disorder" },
+  { name: "Samir Tlemceni", condition: "Anxiety" },
+  { name: "Rania Mekhloufi", condition: "Stress" },
+  { name: "Walid Chikhi", condition: "Adolescent Behavioral Issues" },
+  { name: "Amina Cheriet", condition: "Panic Attacks" },
 ];
+
 
 export default function PatientsPage() {
   return (
     <div className="container mx-auto p-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {doctors.map((doctor, index) => (
+        {patients.map((patients, index) => (
           <Card key={index} className="flex flex-col items-center p-6">
             <div className="relative mb-4">
               <Avatar className="w-24 h-24">
-                <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${doctor.name.split(' ').join('+')}`} alt={doctor.name} />
-                <AvatarFallback>{doctor.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${patients.name.split(' ').join('+')}`} alt={patients.name} />
+                <AvatarFallback>{patients.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
               </Avatar>
               <span className="absolute bottom-1 right-1 block h-4 w-4 rounded-full bg-green-500 ring-2 ring-white"></span>
             </div>
             <div className="text-center mb-4">
-              <p className="font-semibold text-lg">{doctor.name}</p>
-              <p className="text-sm text-primary">{doctor.specialty}</p>
+              <p className="font-semibold text-lg">{patients.name}</p>
+              <p className="text-sm text-primary">{patients.condition}</p>
             </div>
             <CardFooter className="flex flex-col space-y-2 w-full p-0">
               <Button variant="outline" className="w-full">CHAT</Button>
-              <Button className="w-full">BOOK</Button>
+              <Button className="w-full">Details</Button>
             </CardFooter>
           </Card>
         ))}
