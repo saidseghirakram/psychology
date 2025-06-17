@@ -35,10 +35,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <Card className="w-full max-w-md shadow-lg border border-primary/10">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 ">
+      <Card className="w-full max-w-4xl shadow-2xl border border-primary/10  p-6">
         <CardHeader>
-          <CardTitle className="text-primary text-2xl text-center">Doctor Login</CardTitle>
+          <CardTitle className="text-primary text-2xl text-center mb-10 sm:mb-16">Doctor Login</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-6">
