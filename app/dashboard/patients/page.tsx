@@ -34,7 +34,6 @@ export default function PatientsPage() {
 						key={index}
 						className="flex flex-col items-center p-6 rounded-xl shadow-lg bg-background/90 w-full max-w-md mx-auto"
 					>
-						{/* Top row: Avatar + Info */}
 						<div className="flex w-full items-center gap-4 mb-4">
 							<div className="relative">
 								<Avatar className="w-16 h-16">
@@ -53,7 +52,6 @@ export default function PatientsPage() {
 								<span className="text-sm text-primary mt-1">{patient.condition}</span>
 							</div>
 						</div>
-						{/* Emotion tracker */}
 						<div className="flex items-end justify-center gap-1 mb-4 mt-1 w-full max-w-[340px] mx-auto">
 							{emotionData.map((emo, i) => (
 								<div
@@ -77,7 +75,6 @@ export default function PatientsPage() {
 								</div>
 							))}
 						</div>
-						{/* Buttons */}
 						<CardFooter className="flex flex-row w-full p-0 gap-2 mt-2">
 							<Button
 								asChild
@@ -92,7 +89,13 @@ export default function PatientsPage() {
 									CHAT
 								</Link>
 							</Button>
-							<Button className="w-1/2">Details</Button>
+							<Button asChild className="w-1/2">
+								<Link
+									href={`/dashboard/patients/${encodeURIComponent(patient.name)}`}
+								>
+									Details
+								</Link>
+							</Button>
 						</CardFooter>
 					</Card>
 				))}
