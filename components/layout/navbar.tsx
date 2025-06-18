@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { usePathname } from "next/navigation"; 
-import React from "react"; 
+import React, { useEffect, useState } from "react"; 
 import { useTheme } from "@/contexts/ThemeContext";
 
 const getTitleFromPathname = (pathname: string): string => {
@@ -37,6 +37,13 @@ export function Navbar() {
   const pathname = usePathname();
   const pageTitle = getTitleFromPathname(pathname ?? '');
   const { isDarkMode, toggleTheme } = useTheme();
+  const [fullName, setFullName] = useState("");
+
+  useEffect(() => {
+    // This runs only on the client
+    const name = localStorage.getItem('fullName');
+    if (name) setFullName(name);
+  }, []);
 
   return (
     <header className="w-full shadow-sm bg-secondary p-4 my-4 rounded-lg dark:bg-gray-800">
@@ -72,8 +79,10 @@ export function Navbar() {
               <AvatarFallback>OB</AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-sm font-medium leading-none dark:text-white">Ola Boluwatife</p>
-              <p className="text-xs text-muted-foreground dark:text-gray-400">PATIENT</p>
+              <p className="text-sm font-medium leading-none dark:text-white">
+                {fullName ? fullName : "Guest"}
+              </p>
+              <p className="text-xs text-muted-foreground dark:text-gray-400">DOCTOR</p>
             </div>
           </div>
           <div className="flex items-center space-x-2 ml-4">
