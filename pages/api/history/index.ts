@@ -3,13 +3,19 @@ import { supabase } from '@/lib/supabaseClient'
 import { handleApiError } from '@/lib/errorHandler'
 import { requireAuth } from '@/lib/authMiddleware'
 
+type AuthUser = {
+  id: number
+  type: 'doctor' | 'patient'
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const user = await requireAuth(req, res)
-  if (!user || typeof user !== 'object' || !('id' in user) || !('type' in user)) {
+  if (!user) {
     return res.status(401).json({ error: 'Unauthorized' })
   }
-  const userId = (user as any).id
-  const userType = (user as any).type 
+
+  const { id: userId, type: userType } = user as AuthUser
+
 
   // Fetch All history for doctor OR patient
   if (req.method === 'GET') {
