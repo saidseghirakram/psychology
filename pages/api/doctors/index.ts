@@ -7,14 +7,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const user = await requireAuth(req, res);
   if (!user) return;
 
-  // ✅ Cast the JWT payload to a known type
-  const { id } = user as { id: number };
 
+  const { id } = user as { id: number };
+/* getAll patient of the doctor */
   if (req.method === 'GET') {
     const { data, error } = await supabase
       .from('patients')
       .select('*')
-      .eq('doctor_id', id); // fetch patients assigned to this doctor
+      .eq('doctor_id', id); 
 
     if (error) return handleApiError(res, error);
     return res.status(200).json({ patients: data });

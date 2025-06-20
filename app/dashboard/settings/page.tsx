@@ -58,9 +58,13 @@ export default function SettingsPage() {
       localStorage.setItem("fullName", result.doctor.fullName);
       localStorage.setItem("email", result.doctor.email);
       toast.success("Doctor info updated successfully!");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      toast.error(error.message || "Something went wrong.");
+      let message = "Something went wrong.";
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      toast.error(message);
     } finally {
       setLoading(false);
     }

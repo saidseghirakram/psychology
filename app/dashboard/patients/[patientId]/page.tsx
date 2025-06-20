@@ -4,54 +4,83 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { CalendarDays, FileText, History, HeartPulse, Smile } from "lucide-react";
+import { useEffect, useState } from "react";
 
-const patients = [
-  { name: "Abdelkader Bensalem", condition: "Depression", nextAppointment: "2024-06-15 14:00" },
-  { name: "Yasmine Bouzid", condition: "Anxiety", nextAppointment: "2024-06-18 10:30" },
-  { name: "Karim Belkacem", condition: "Stress", nextAppointment: "2024-06-20 09:00" },
-  { name: "Nassima Haddad", condition: "Bipolar Disorder", nextAppointment: "2024-06-22 11:00" },
-  { name: "Samir Tlemceni", condition: "Anxiety", nextAppointment: "2024-06-25 15:00" },
-  { name: "Rania Mekhloufi", condition: "Stress", nextAppointment: "2024-06-28 13:00" },
-  { name: "Walid Chikhi", condition: "Adolescent Behavioral Issues", nextAppointment: "2024-07-01 10:00" },
-  { name: "Amina Cheriet", condition: "Panic Attacks", nextAppointment: "2024-07-03 09:30" },
+const conditions = [
+  "Depression", "Anxiety", "Stress", "Bipolar Disorder", "Panic Attacks",
+  "Adolescent Behavioral Issues", "OCD", "PTSD", "Eating Disorder", "Phobia"
 ];
+const emojis = ["😊", "😣", "😁", "😡", "🙂", "😐", "😴", "😭", "😃", "😔"];
 
-const emotionData = [
-  { day: "Sat", date: "07", emoji: "😊" },
-  { day: "Fri", date: "06", emoji: "😣" },
-  { day: "Thu", date: "05", emoji: "😁" },
-  { day: "Wed", date: "04", emoji: "😡", active: true },
-  { day: "Tue", date: "03", emoji: "🙂" },
-  { day: "Mon", date: "02", emoji: "😐" },
-  { day: "Sun", date: "01", emoji: "😴" },
-];
-
-// Mock reports for demonstration
-const reports = [
-  { file: "session1.pdf", date: "2024-06-01", summary: "Session 1 summary and recommendations." },
-  { file: "session2.txt", date: "2024-06-08", summary: "Session 2: Progress and notes." },
-];
-
-// Mock session history
-const sessions = [
-  { date: "2024-06-01", summary: "Discussed anxiety triggers and coping strategies.", therapist: "Dr. Sarah Lamine" },
-  { date: "2024-06-08", summary: "Reviewed progress, introduced journaling.", therapist: "Dr. Sarah Lamine" },
-  { date: "2024-06-15", summary: "Explored family dynamics, set new goals.", therapist: "Dr. Sarah Lamine" },
-];
-
-// Mock mood history
-const moodHistory = [
-  { date: "2024-06-15", mood: "😊 Happy" },
-  { date: "2024-06-14", mood: "😣 Anxious" },
-  { date: "2024-06-13", mood: "😐 Neutral" },
-  { date: "2024-06-12", mood: "😡 Irritable" },
-];
-
-// Mock diagnosis & treatment
-const diagnosis = "Generalized Anxiety Disorder";
-const treatmentPlan = "weekly sessions, daily journaling.";
-const therapyType = "Depression";
-
+function getRandomCondition() {
+  return conditions[Math.floor(Math.random() * conditions.length)];
+}
+function getRandomDateInFuture() {
+  const now = new Date();
+  const daysToAdd = Math.floor(Math.random() * 30) + 1;
+  now.setDate(now.getDate() + daysToAdd);
+  const hour = (8 + Math.floor(Math.random() * 8)).toString().padStart(2, "0");
+  const minute = (Math.floor(Math.random() * 2) * 30).toString().padStart(2, "0");
+  return `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2, "0")}-${now.getDate().toString().padStart(2, "0")} ${hour}:${minute}`;
+}
+function getRandomReports() {
+  const files = ["session1.pdf", "session2.txt", "report3.pdf", "notes4.txt"];
+  return Array.from({length: Math.floor(Math.random()*2)+2}, (_, i) => ({
+    file: files[Math.floor(Math.random()*files.length)],
+    date: `2024-06-${(Math.floor(Math.random()*15)+1).toString().padStart(2, "0")}`,
+    summary: `Session ${i+1} summary and recommendations.`
+  }));
+}
+function getRandomSessions() {
+  return Array.from({length: 3}, (_, i) => ({
+    date: `2024-06-${(i+1).toString().padStart(2, "0")}`,
+    summary: [
+      "Discussed anxiety triggers and coping strategies.",
+      "Reviewed progress, introduced journaling.",
+      "Explored family dynamics, set new goals."
+    ][i] || "General session notes.",
+  }));
+}
+function getRandomMoodHistory() {
+  const moods = ["😊 Happy", "😣 Anxious", "😐 Neutral", "😡 Irritable", "😁 Excited", "😔 Sad"];
+  return Array.from({length: 4}, (_, i) => ({
+    date: `2024-06-${(15-i).toString().padStart(2, "0")}`,
+    mood: moods[Math.floor(Math.random()*moods.length)]
+  }));
+}
+function getRandomDiagnosis() {
+  const diagnoses = [
+    "Generalized Anxiety Disorder", "Major Depressive Disorder", "Bipolar Disorder", "PTSD", "OCD"
+  ];
+  return diagnoses[Math.floor(Math.random()*diagnoses.length)];
+}
+function getRandomTherapyType() {
+  const types = ["CBT", "Depression", "Family Therapy", "Group Therapy", "Mindfulness"];
+  return types[Math.floor(Math.random()*types.length)];
+}
+function getRandomTreatmentPlan() {
+  const plans = [
+    "weekly sessions, daily journaling.",
+    "bi-weekly therapy, mindfulness exercises.",
+    "monthly check-ins, medication review.",
+    "daily mood tracking, support group participation."
+  ];
+  return plans[Math.floor(Math.random()*plans.length)];
+}
+function getRandomEmotionData() {
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const today = new Date();
+  return Array.from({length: 7}, (_, i) => {
+    const d = new Date(today);
+    d.setDate(today.getDate() - (6-i));
+    return {
+      day: days[d.getDay()],
+      date: d.getDate().toString().padStart(2, "0"),
+      emoji: emojis[Math.floor(Math.random()*emojis.length)],
+      active: i === 6
+    };
+  });
+}
 
 function getFileIcon(file: string) {
   if (file.endsWith(".pdf")) return <FileText className="w-5 h-5 text-red-500" />;
@@ -64,8 +93,97 @@ function getFileBadge(file: string) {
   return null;
 }
 
+interface Patient {
+  id: number;
+  created_at: string;
+  fullName: string;
+  email: string;
+  password: string;
+  doctor_id: number;
+  condition: string;
+  nextAppointment: string;
+}
+interface EmotionData {
+  day: string;
+  date: string;
+  emoji: string;
+  active?: boolean;
+}
+interface Report {
+  file: string;
+  date: string;
+  summary: string;
+}
+interface Session {
+  date: string;
+  summary: string;
+  therapist?: string;
+}
+interface MoodHistory {
+  date: string;
+  mood: string;
+}
+
 export default function PatientDetailsPage() {
   const params = useParams();
+  const [patient, setPatient] = useState<Patient | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [emotionData, setEmotionData] = useState<EmotionData[]>([]);
+  const [reports, setReports] = useState<Report[]>([]);
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [moodHistory, setMoodHistory] = useState<MoodHistory[]>([]);
+  const [diagnosis, setDiagnosis] = useState("");
+  const [treatmentPlan, setTreatmentPlan] = useState("");
+  const [therapyType, setTherapyType] = useState("");
+
+  useEffect(() => {
+    async function fetchPatient() {
+      setLoading(true);
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch("/api/doctors", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await res.json();
+        if (data.patients && params && params.patientId) {
+          const patientName = decodeURIComponent(params.patientId as string);
+          const found = data.patients.find((p: Patient) => p.fullName === patientName);
+          if (found) {
+            setPatient({
+              ...found,
+              condition: getRandomCondition(),
+              nextAppointment: getRandomDateInFuture(),
+            });
+            setEmotionData(getRandomEmotionData());
+            setReports(getRandomReports());
+            setSessions(getRandomSessions());
+            setMoodHistory(getRandomMoodHistory());
+            setDiagnosis(getRandomDiagnosis());
+            setTreatmentPlan(getRandomTreatmentPlan());
+            setTherapyType(getRandomTherapyType());
+          } else {
+            setPatient(null);
+          }
+        } else {
+          setPatient(null);
+        }
+      } catch {
+        setPatient(null);
+      }
+      setLoading(false);
+    }
+    fetchPatient();
+  }, [params]);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto p-4">
+        <Card className="p-8 text-center text-lg font-semibold text-primary">Loading...</Card>
+      </div>
+    );
+  }
   if (!params || !params.patientId) {
     return (
       <div className="container mx-auto p-4">
@@ -75,10 +193,6 @@ export default function PatientDetailsPage() {
       </div>
     );
   }
-  // patientId is the encoded name
-  const patientName = decodeURIComponent(params.patientId as string);
-  const patient = patients.find((p) => p.name === patientName);
-
   if (!patient) {
     return (
       <div className="container mx-auto p-4">
@@ -92,12 +206,12 @@ export default function PatientDetailsPage() {
       <Card className="flex flex-col items-center p-8 rounded-xl shadow bg-background border w-full">
         <div className="relative mb-4">
           <Avatar className="w-24 h-24 border-4 border-primary shadow-lg">
-            <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${patient.name.split(" ").join("+")}`} alt={patient.name} />
-            <AvatarFallback className="text-2xl">{patient.name.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
+            <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(patient.fullName)}`} alt={patient.fullName} />
+            <AvatarFallback className="text-2xl">{patient.fullName.split(" ").map((n: string) => n[0]).join("")}</AvatarFallback>
           </Avatar>
           <span className="absolute bottom-2 right-2 block h-5 w-5 rounded-full bg-green-400 border-2 border-white shadow"></span>
         </div>
-        <span className="font-bold text-xl text-foreground mb-1 text-center">{patient.name}</span>
+        <span className="font-bold text-xl text-foreground mb-1 text-center">{patient.fullName}</span>
         <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-2">{patient.condition}</span>
         <div className="flex items-center gap-2 text-muted-foreground mb-4">
           <CalendarDays className="w-5 h-5 text-primary" />
@@ -139,7 +253,7 @@ export default function PatientDetailsPage() {
               <span className="text-sm text-foreground mb-2">{report.summary}</span>
               <CardFooter className="p-0 mt-2">
                 <a
-                  href={`/reports/${encodeURIComponent(patient.name)}/${report.file}`}
+                  href={`/reports/${encodeURIComponent(patient.fullName)}/${report.file}`}
                   download
                   className="w-full"
                 >

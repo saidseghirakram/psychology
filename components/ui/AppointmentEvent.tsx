@@ -9,6 +9,7 @@ export type AppointmentEventData = {
   patient?: string;
   doctor?: string;
   description?: string;
+  patient_id?: number;
 };
 
 const typeColors: Record<AppointmentEventData["type"], { light: string; dark: string }> = {
