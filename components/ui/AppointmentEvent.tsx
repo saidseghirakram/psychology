@@ -18,7 +18,7 @@ const typeColors: Record<AppointmentEventData["type"], { light: string; dark: st
   },
   examination: {
     light: "bg-green-100 text-green-900",
-    dark: "bg-green-800 text-white"
+    dark: "bg-red-500 text-white"
   },
   consultation: {
     light: "bg-purple-500 text-white",
