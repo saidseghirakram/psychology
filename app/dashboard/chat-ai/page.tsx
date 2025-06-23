@@ -64,6 +64,8 @@ export default function ChatAiPage() {
         },
       ]);
     } catch (err) {
+      console.log(err);
+      
       setMessages((prev) => [
         ...prev.filter((msg) => msg.sender !== 'loader'),
         { text: '(AI) Sorry, there was an error.', sender: 'error' },

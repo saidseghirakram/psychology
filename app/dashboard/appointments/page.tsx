@@ -73,6 +73,7 @@ export default function AppointmentsPage() {
           setEvents(mapped);
         }
       } catch (error) {
+        console.error("Failed to create appointment:", error);
         setEvents([]);
       } finally {
         setLoading(false);
@@ -131,7 +132,7 @@ export default function AppointmentsPage() {
       setOpen(false);
       window.location.reload(); // Or refetch appointments instead of reload
     } catch (error) {
-      alert("Something went wrong.");
+      console.error("Failed to create appointment:", error);
     }
   };
 

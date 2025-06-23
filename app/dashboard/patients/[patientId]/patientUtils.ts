@@ -62,11 +62,11 @@ export function getRandomTreatmentPlan() {
   ];
   return plans[Math.floor(Math.random() * plans.length)];
 }
-export function getFileIcon(file: string) {
+export function getFileIcon() {
   // This is a UI function, should be reimplemented in the component
   return null;
 }
-export function getFileBadge(file: string) {
+export function getFileBadge() {
   // This is a UI function, should be reimplemented in the component
   return null;
 }
