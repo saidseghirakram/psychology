@@ -27,6 +27,7 @@
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.13",
     "jsonwebtoken": "^9.0.2",
+    "jspdf": "^3.0.1",
     "lucide-react": "^0.511.0",
     "next": "15.3.2",
     "pusher": "^5.2.0",

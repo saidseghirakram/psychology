@@ -6,8 +6,24 @@ import bcrypt from 'bcrypt';
 const INTERNAL_EMAIL = process.env.SUPABASE_EMAIL;
 const INTERNAL_PASSWORD = process.env.SUPABASE_PASSWORD;
 
+// Define a common base and specialized types
+type BaseUser = {
+  fullName: string;
+  email: string;
+  password: string;
+};
+
+type DoctorInsertData = BaseUser;
+
+type PatientInsertData = BaseUser & {
+  age: number;
+  gender: string;
+  patientType: string;
+};
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  // Check internal credentials (from env or headers)
+  if (req.method !== 'POST') return res.status(405).end();
+
   let internalEmail = INTERNAL_EMAIL;
   let internalPassword = INTERNAL_PASSWORD;
 
@@ -27,9 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return handleApiError(res, 'Unauthorized: Invalid internal credentials', 401);
   }
 
-  if (req.method !== 'POST') return res.status(405).end();
-
-  const { fullName, email, password, type } = req.body;
+  const { fullName, email, password, type, age, gender, patientType } = req.body;
 
   if (!fullName || !email || !password || !type) {
     return handleApiError(res, 'fullName, email, password, and type are required', 400);
@@ -38,16 +52,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const trimmedEmail = email.trim().toLowerCase();
 
   let tableName = '';
-  if (type === 'doctor') tableName = 'doctors';
-  else if (type === 'patient') tableName = 'patients';
-  else return handleApiError(res, 'Invalid type. Must be doctor or patient.', 400);
+  let insertData: DoctorInsertData | PatientInsertData = {
+    fullName,
+    email: trimmedEmail,
+    password: await bcrypt.hash(password, 10),
+  };
 
-  // Hash the password
-  const hashedPassword = await bcrypt.hash(password, 10);
+  if (type === 'doctor') {
+    tableName = 'doctors';
+  } else if (type === 'patient') {
+    tableName = 'patients';
+
+    if (age === undefined || gender === undefined || patientType === undefined) {
+      return handleApiError(res, 'age, gender, and patientType are required for patient', 400);
+    }
+
+    insertData = {
+      ...insertData,
+      age,
+      gender,
+      patientType,
+    } as PatientInsertData;
+  } else {
+    return handleApiError(res, 'Invalid type. Must be doctor or patient.', 400);
+  }
 
   const { data, error } = await supabaseAdmin
     .from(tableName)
-    .insert([{ fullName, email: trimmedEmail, password: hashedPassword }])
+    .insert([insertData])
     .select()
     .single();
 
