@@ -130,7 +130,8 @@ export default function PatientsPage() {
 							</div>
 							<CardFooter className="flex flex-row w-full p-0 gap-2 mt-2">
 								<Button asChild variant="outline" className="w-1/2">
-									<Link href={`/dashboard/patients/${encodeURIComponent(patient.fullName)}/chat`}>
+								<Link href={`/dashboard/patients/${patient.id}/chat`}>
+
 										CHAT
 									</Link>
 								</Button>
