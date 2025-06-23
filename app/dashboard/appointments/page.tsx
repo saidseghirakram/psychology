@@ -23,6 +23,11 @@ interface Appointment {
   created_at: string;
 }
 
+interface Patient {
+  id: number;
+  fullName: string;
+}
+
 const types: AppointmentEventData["type"][] = [
   "emergency",
   "examination",
@@ -38,13 +43,18 @@ function getRandomType() {
 export default function AppointmentsPage() {
   const [events, setEvents] = useState<AppointmentEventData[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [open, setOpen] = useState(false);
   const [patientId, setPatientId] = useState("");
   const [date, setDate] = useState("");
   const [hour, setHour] = useState("");
 
+  const [patients, setPatients] = useState<Patient[]>([]);
+
   useEffect(() => {
+    const token = localStorage.getItem("token");
+
     async function fetchAppointments() {
-      const token = localStorage.getItem("token");
       try {
         const res = await fetch("/api/appointments", {
           headers: {
@@ -69,11 +79,29 @@ export default function AppointmentsPage() {
       }
     }
 
+    async function fetchPatients() {
+      try {
+        const res = await fetch("/api/doctors", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await res.json();
+        if (data.patients) {
+          setPatients(data.patients);
+        }
+      } catch (err) {
+        console.error("Failed to load patients", err);
+      }
+    }
+
     fetchAppointments();
+    fetchPatients();
   }, []);
 
   const handleCreate = async () => {
     const token = localStorage.getItem("token");
+
     if (!patientId || !date || !hour) {
       alert("All fields are required");
       return;
@@ -100,7 +128,8 @@ export default function AppointmentsPage() {
       }
 
       alert("Appointment created!");
-      window.location.reload(); // or refetch the events manually
+      setOpen(false);
+      window.location.reload(); // Or refetch appointments instead of reload
     } catch (error) {
       alert("Something went wrong.");
     }
@@ -112,7 +141,7 @@ export default function AppointmentsPage() {
 
   return (
     <div className="w-full p-4">
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button className="mb-4 w-full">Add Appointment</Button>
         </DialogTrigger>
@@ -123,13 +152,21 @@ export default function AppointmentsPage() {
 
           <div className="grid gap-4 py-4">
             <div className="flex flex-col gap-1">
-              <Label>Patient ID</Label>
-              <Input
-                type="number"
+              <Label>Patient</Label>
+              <select
                 value={patientId}
                 onChange={(e) => setPatientId(e.target.value)}
-              />
+                className="border border-gray-300 p-2 rounded-md bg-primary"
+              >
+                <option value="">Select a patient</option>
+                {patients.map((patient) => (
+                  <option key={patient.id} value={patient.id}>
+                    {patient.fullName}
+                  </option>
+                ))}
+              </select>
             </div>
+
             <div className="flex flex-col gap-1">
               <Label>Date</Label>
               <Input
@@ -138,6 +175,7 @@ export default function AppointmentsPage() {
                 onChange={(e) => setDate(e.target.value)}
               />
             </div>
+
             <div className="flex flex-col gap-1">
               <Label>Hour</Label>
               <Input
@@ -146,6 +184,7 @@ export default function AppointmentsPage() {
                 onChange={(e) => setHour(e.target.value)}
               />
             </div>
+
             <Button onClick={handleCreate}>Create Appointment</Button>
           </div>
         </DialogContent>
