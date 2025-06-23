@@ -6,11 +6,21 @@ import { Button } from "@/components/ui/button";
 import { CalendarDays, FileText, History, HeartPulse, Smile } from "lucide-react";
 import { useEffect, useState } from "react";
 
+const moodEmojiMap: Record<string, string> = {
+  happy: "😊",
+  sad: "😔",
+  angry: "😡",
+  neutral: "😐",
+  excited: "😃",
+  tired: "😴",
+  shy: "😣",
+  preservative: "🙂",
+};
+
 const conditions = [
   "Depression", "Anxiety", "Stress", "Bipolar Disorder", "Panic Attacks",
   "Adolescent Behavioral Issues", "OCD", "PTSD", "Eating Disorder", "Phobia"
 ];
-const emojis = ["😊", "😣", "😁", "😡", "🙂", "😐", "😴", "😭", "😃", "😔"];
 
 function getRandomCondition() {
   return conditions[Math.floor(Math.random() * conditions.length)];
@@ -21,72 +31,49 @@ function getRandomDateInFuture() {
   now.setDate(now.getDate() + daysToAdd);
   const hour = (8 + Math.floor(Math.random() * 8)).toString().padStart(2, "0");
   const minute = (Math.floor(Math.random() * 2) * 30).toString().padStart(2, "0");
-  return `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2, "0")}-${now.getDate().toString().padStart(2, "0")} ${hour}:${minute}`;
+  return `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, "0")}-${now.getDate().toString().padStart(2, "0")} ${hour}:${minute}`;
 }
 function getRandomReports() {
   const files = ["session1.pdf", "session2.txt", "report3.pdf", "notes4.txt"];
-  return Array.from({length: Math.floor(Math.random()*2)+2}, (_, i) => ({
-    file: files[Math.floor(Math.random()*files.length)],
-    date: `2024-06-${(Math.floor(Math.random()*15)+1).toString().padStart(2, "0")}`,
-    summary: `Session ${i+1} summary and recommendations.`
+  return Array.from({ length: Math.floor(Math.random() * 2) + 2 }, (_, i) => ({
+    file: files[Math.floor(Math.random() * files.length)],
+    date: `2024-06-${(Math.floor(Math.random() * 15) + 1).toString().padStart(2, "0")}`,
+    summary: `Session ${i + 1} summary and recommendations.`,
   }));
 }
 function getRandomSessions() {
-  return Array.from({length: 3}, (_, i) => ({
-    date: `2024-06-${(i+1).toString().padStart(2, "0")}`,
+  return Array.from({ length: 3 }, (_, i) => ({
+    date: `2024-06-${(i + 1).toString().padStart(2, "0")}`,
     summary: [
       "Discussed anxiety triggers and coping strategies.",
       "Reviewed progress, introduced journaling.",
-      "Explored family dynamics, set new goals."
+      "Explored family dynamics, set new goals.",
     ][i] || "General session notes.",
-  }));
-}
-function getRandomMoodHistory() {
-  const moods = ["😊 Happy", "😣 Anxious", "😐 Neutral", "😡 Irritable", "😁 Excited", "😔 Sad"];
-  return Array.from({length: 4}, (_, i) => ({
-    date: `2024-06-${(15-i).toString().padStart(2, "0")}`,
-    mood: moods[Math.floor(Math.random()*moods.length)]
   }));
 }
 function getRandomDiagnosis() {
   const diagnoses = [
     "Generalized Anxiety Disorder", "Major Depressive Disorder", "Bipolar Disorder", "PTSD", "OCD"
   ];
-  return diagnoses[Math.floor(Math.random()*diagnoses.length)];
+  return diagnoses[Math.floor(Math.random() * diagnoses.length)];
 }
 function getRandomTherapyType() {
   const types = ["CBT", "Depression", "Family Therapy", "Group Therapy", "Mindfulness"];
-  return types[Math.floor(Math.random()*types.length)];
+  return types[Math.floor(Math.random() * types.length)];
 }
 function getRandomTreatmentPlan() {
   const plans = [
     "weekly sessions, daily journaling.",
     "bi-weekly therapy, mindfulness exercises.",
     "monthly check-ins, medication review.",
-    "daily mood tracking, support group participation."
+    "daily mood tracking, support group participation.",
   ];
-  return plans[Math.floor(Math.random()*plans.length)];
+  return plans[Math.floor(Math.random() * plans.length)];
 }
-function getRandomEmotionData() {
-  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const today = new Date();
-  return Array.from({length: 7}, (_, i) => {
-    const d = new Date(today);
-    d.setDate(today.getDate() - (6-i));
-    return {
-      day: days[d.getDay()],
-      date: d.getDate().toString().padStart(2, "0"),
-      emoji: emojis[Math.floor(Math.random()*emojis.length)],
-      active: i === 6
-    };
-  });
-}
-
 function getFileIcon(file: string) {
   if (file.endsWith(".pdf")) return <FileText className="w-5 h-5 text-red-500" />;
   return <FileText className="w-5 h-5 text-blue-500" />;
 }
-
 function getFileBadge(file: string) {
   if (file.endsWith(".pdf")) return <span className="ml-2 px-2 py-0.5 rounded bg-red-100 text-red-600 text-xs font-semibold">PDF</span>;
   if (file.endsWith(".txt")) return <span className="ml-2 px-2 py-0.5 rounded bg-blue-100 text-blue-600 text-xs font-semibold">TXT</span>;
@@ -103,38 +90,48 @@ interface Patient {
   condition: string;
   nextAppointment: string;
 }
-interface EmotionData {
+
+interface Mood {
   day: string;
-  date: string;
-  emoji: string;
-  active?: boolean;
+  overall_mood: string;
 }
+
 interface Report {
   file: string;
   date: string;
   summary: string;
 }
+
 interface Session {
   date: string;
   summary: string;
   therapist?: string;
-}
-interface MoodHistory {
-  date: string;
-  mood: string;
 }
 
 export default function PatientDetailsPage() {
   const params = useParams();
   const [patient, setPatient] = useState<Patient | null>(null);
   const [loading, setLoading] = useState(true);
-  const [emotionData, setEmotionData] = useState<EmotionData[]>([]);
+  const [moodHistory, setMoodHistory] = useState<Mood[]>([]);
   const [reports, setReports] = useState<Report[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
-  const [moodHistory, setMoodHistory] = useState<MoodHistory[]>([]);
   const [diagnosis, setDiagnosis] = useState("");
   const [treatmentPlan, setTreatmentPlan] = useState("");
   const [therapyType, setTherapyType] = useState("");
+
+  async function fetchPatientMoods(patientId: number, token: string) {
+    try {
+      const res = await fetch(`/api/moods/${patientId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      return data?.moods || [];
+    } catch {
+      return [];
+    }
+  }
 
   useEffect(() => {
     async function fetchPatient() {
@@ -156,10 +153,12 @@ export default function PatientDetailsPage() {
               condition: getRandomCondition(),
               nextAppointment: getRandomDateInFuture(),
             });
-            setEmotionData(getRandomEmotionData());
+
+            const moods = await fetchPatientMoods(found.id, token || "");
+            setMoodHistory(moods);
+
             setReports(getRandomReports());
             setSessions(getRandomSessions());
-            setMoodHistory(getRandomMoodHistory());
             setDiagnosis(getRandomDiagnosis());
             setTreatmentPlan(getRandomTreatmentPlan());
             setTherapyType(getRandomTherapyType());
@@ -184,6 +183,7 @@ export default function PatientDetailsPage() {
       </div>
     );
   }
+
   if (!params || !params.patientId) {
     return (
       <div className="container mx-auto p-4">
@@ -193,6 +193,7 @@ export default function PatientDetailsPage() {
       </div>
     );
   }
+
   if (!patient) {
     return (
       <div className="container mx-auto p-4">
@@ -218,24 +219,25 @@ export default function PatientDetailsPage() {
           <span className="text-xs">Next appointment:</span>
           <span className="font-semibold text-primary text-sm">{patient.nextAppointment}</span>
         </div>
+
         <div className="w-full overflow-x-auto pb-2">
           <div className="flex items-end justify-center gap-2 min-w-[340px]">
-            {emotionData.map((emo, i) => (
+            {moodHistory.map((mood, i) => (
               <div
                 key={i}
-                className={`flex flex-col items-center justify-center transition-all duration-200
-                  ${emo.active ? "bg-primary text-white shadow-lg scale-110" : "border border-primary/30 bg-background text-foreground hover:bg-primary/10"}
-                  rounded-2xl shadow p-2 cursor-pointer min-w-[48px] min-h-[60px] mx-1
-                `}
+                className="flex flex-col items-center justify-center rounded-2xl border border-primary/30 bg-background text-foreground shadow p-2 min-w-[48px] min-h-[60px]"
               >
-                <span className="text-xs font-medium leading-none mt-1">{emo.day}</span>
-                <span className="text-xs leading-none">{emo.date}</span>
-                <span className="text-xl leading-none mt-1">{emo.emoji}</span>
+                <span className="text-xs font-medium leading-none mt-1">{mood.day}</span>
+                <span className="text-xs leading-none">{/* Optionally show date */}</span>
+                <span className="text-xl leading-none mt-1">
+                  {moodEmojiMap[mood.overall_mood?.toLowerCase()] || "❓"}
+                </span>
               </div>
             ))}
           </div>
         </div>
       </Card>
+
       <Card className="p-6 rounded-xl shadow bg-background border flex flex-col w-full">
         <div className="flex items-center gap-2 mb-3">
           <FileText className="w-6 h-6 text-blue-500" />
@@ -267,6 +269,7 @@ export default function PatientDetailsPage() {
           )}
         </div>
       </Card>
+
       <Card className="p-6 rounded-xl shadow bg-background border flex flex-col w-full gap-8">
         <h3 className="text-lg font-bold text-primary flex items-center gap-2 mb-2"><History className="w-5 h-5" /> Patient History</h3>
         <div className="pb-4 border-b border-muted-foreground/10">
@@ -282,18 +285,20 @@ export default function PatientDetailsPage() {
             ))}
           </ol>
         </div>
+
         <div className="pb-4 border-b border-muted-foreground/10">
-          <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2"><Smile className="w-4 h-4 text-yellow-400" /> Recent Mood Entries</h4>
+          <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2"><Smile className="w-4 h-4 text-yellow-400" /> Mood Data</h4>
           <div className="flex gap-3 overflow-x-auto pb-2">
             {moodHistory.map((m, i) => (
               <div key={i} className="flex flex-col items-center min-w-[60px]">
-                <span className="text-2xl">{m.mood.split(' ')[0]}</span>
-                <span className="text-xs text-muted-foreground mt-1">{m.date}</span>
-                <span className="text-xs text-muted-foreground">{m.mood.split(' ')[1]}</span>
+                <span className="text-2xl">{moodEmojiMap[m.overall_mood?.toLowerCase()] || "❓"}</span>
+                <span className="text-xs text-muted-foreground mt-1">{m.day}</span>
+                <span className="text-xs text-muted-foreground">{m.overall_mood}</span>
               </div>
             ))}
           </div>
         </div>
+
         <div className="pb-4 border-b border-muted-foreground/10">
           <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2"><HeartPulse className="w-4 h-4 text-pink-500" /> Diagnosis & Treatment</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -314,4 +319,4 @@ export default function PatientDetailsPage() {
       </Card>
     </div>
   );
-} 
+}
